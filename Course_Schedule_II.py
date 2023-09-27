@@ -3,6 +3,9 @@
 
 # Disconnected graph traversal using DFS
 
+# DFS Approach 
+# Time Complexity - O(V+E)
+# Space Complexity - O(V)
 def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
 
     graph = defaultdict(list)
@@ -33,3 +36,33 @@ def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int
             if not traverse(i):
                 return []
     return order
+
+# BFS Approach 
+# Time Complexity - O(V+E)
+# Space Complexity - O(V)
+def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+
+    graph = defaultdict(list)
+    indegree = [0]*numCourses
+
+    for b, a in prerequisites:
+        graph[a] += [b]
+        indegree[b]+=1
+    
+    queue = deque()
+    order = []
+    
+    for i in range(numCourses):
+        if indegree[i]==0:
+            queue.append(i)
+
+    while queue:
+        node = queue.popleft()
+        numCourses-=1
+        order+=[node]
+        for child in graph[node]:
+            indegree[child]-=1
+            if indegree[child]==0:
+                queue.append(child)
+    
+    return order if numCourses==0 else []
